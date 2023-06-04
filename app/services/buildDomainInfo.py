@@ -11,7 +11,7 @@ class BuildDomainInfo(BaseThread):
 
         self.domain_info_list = []
 
-
+        #解析ip地址和cname
     def work(self, target):
         domain = target
         if hasattr(target, "domain"):

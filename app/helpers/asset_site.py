@@ -10,6 +10,7 @@ def build_show_filed_map(fields):
     return q
 
 
+#按范围 ID 查找站点信息
 def find_site_info_by_scope_id(scope_id):
     query = {
         "scope_id": scope_id

@@ -13,7 +13,7 @@ NUM_COUNT = 4
 
 
 #  FROM: https://github.com/ProjectAnte/dnsgen/blob/master/dnsgen/dnsgen.py
-
+#   是非晴注：dns解析
 class DnsGen(object):
     def __init__(self, subdomains, words, base_domain=None):
         self.subdomains = subdomains
@@ -25,6 +25,7 @@ class DnsGen(object):
         Split domain base on subdomain levels.
         TLD is taken as one part, regardless of its levels (.co.uk, .com, ...)
         """
+        #//根据子域级别拆分域。TLD 被视为一个部分，无论其级别如何（.co.uk、.com等）
 
         # test.1.foo.example.com -> [test, 1, foo, example.com]
         # test.2.foo.example.com.cn -> [test, 2, foo, example.com.cn]
@@ -32,7 +33,8 @@ class DnsGen(object):
         if self.base_domain:
             subdomain = re.sub(re.escape("." + self.base_domain) + "$", '', domain)
             return subdomain.split(".") + [self.base_domain]
-
+        #获取顶级域名和一级域名 tld库
+        #java 实现  https://developer.aliyun.com/article/378166
         ext = tld.get_tld(domain.lower(), fail_silently=True, as_object=True, fix_protocol=True)
         base_domain = "{}.{}".format(ext.domain, ext.suffix)
 
@@ -43,6 +45,8 @@ class DnsGen(object):
     def insert_word_every_index(self, parts):
         """
         Create new subdomain levels by inserting the words between existing levels
+        通过在现有级别之间插入单词来创建新的子域级别
+        在各.之间加入字典内关键词构建新的域名
         """
 
         # test.1.foo.example.com -> WORD.test.1.foo.example.com, test.WORD.1.foo.example.com,
@@ -67,6 +71,7 @@ class DnsGen(object):
     def insert_num_every_index(self, parts):
         """
         Create new subdomain levels by inserting the numbers between existing levels
+        在每级域名后加数字
         """
 
         # foo.test.example.com ->   foo1.test.example.com, foo.test1.example.com,
@@ -88,6 +93,8 @@ class DnsGen(object):
     def prepend_word_every_index(self, parts):
         """
         On every subdomain level, prepend existing content with `WORD` and `WORD-`
+        在每一级域名前后进行拼接字符
+        在每个子域级别，在现有内容前面加上“WORD”和“WORD-”
         """
 
         # test.1.foo.example.com -> WORDtest.1.foo.example.com, test.WORD1.foo.example.com,
@@ -116,6 +123,7 @@ class DnsGen(object):
     def append_word_every_index(self, parts):
         """
         On every subdomain level, append existing content with `WORD` and `WORD-`
+        在每个子域级别，使用“WORD”和“WORD-”附加现有内容，在后面
         """
 
         # test.1.foo.example.com -> testWORD.1.foo.example.com, test.1WORD.foo.example.com,
@@ -144,6 +152,7 @@ class DnsGen(object):
     def replace_word_with_word(self, parts):
         """
         If word longer than 3 is found in existing subdomain, replace it with other words from the dictionary
+        如果在现有子域中找到长度超过 3 的单词，请将其替换为字典中的其他单词
         """
 
         # WORD1.1.foo.example.com -> WORD2.1.foo.example.com, WORD3.1.foo.example.com,

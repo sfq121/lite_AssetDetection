@@ -98,6 +98,8 @@ def get_ip(domain, log_flag=True):
     logger = get_logger()
     ips = []
     try:
+        #python自带方法：将主机名装换成IP地址；
+        #Java可以用InetAddress库
         answers = dns.resolver.resolve(domain, 'A')
         for rdata in answers:
             if rdata.address == '0.0.0.1':
@@ -113,7 +115,9 @@ def get_ip(domain, log_flag=True):
 
     return ips
 
-
+#获取别名
+#https://blog.csdn.net/weixin_41235296/article/details/127916825
+#https://blog.csdn.net/weixin_35939140/article/details/114711661#:~:text=1.%E9%A6%96%E5%85%88%2Cnew%E4%B8%80%E4%B8%AALookup%E5%AF%B9%E8%B1%A1%2C%E7%94%A8%E6%9D%A5%E6%9F%A5%E8%AF%A2%E5%9F%9F%E5%90%8D%20%28%E5%A6%82%3Acsdn.com%29%E7%9A%84Type.%E7%B1%BB%E5%9E%8B%20%28%E5%AE%9E%E4%BE%8B%E4%B8%AD%E4%B8%BAType.MX%2C%E4%BD%A0%E5%8F%AF%E4%BB%A5%E6%8C%87%E5%AE%9A%E5%85%B6%E4%BB%96%E5%A6%82%3AA%20TXT,CNAME%E7%AD%89%29%E7%9A%84%E8%AE%B0%E5%BD%95%202.%E7%84%B6%E5%90%8E%E8%AF%95%E7%94%A8lookup.getResult%20%28%29%20%3D%3D%20Lookup.SUCCESSFUL%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E6%9F%A5%E8%AF%A2%E5%88%B0%E7%BB%93%E6%9E%9C
 def get_cname(domain, log_flag=True):
     logger = get_logger()
     cnames = []
@@ -133,6 +137,8 @@ def get_cname(domain, log_flag=True):
 def domain_parsed(domain, fail_silently=True):
     domain = domain.strip()
     try:
+        #get_tld获取顶级域名
+        #用法解析：https://blog.csdn.net/ningyanggege/article/details/105975826#:~:text=1%20from%20tld%20import%20get%20_tld%202%20url,%28res.fld%29%20%23res.fld%20to%20extract%20the%20domain%205%20%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1%EF%BC%8C%E7%84%B6%E5%90%8E%E8%8E%B7%E5%8F%96%E6%83%B3%E8%A6%81%E7%9A%84%E4%B8%80%E7%BA%A7%E5%9F%9F%E5%90%8D
         res = get_tld(domain, fix_protocol=True,  as_object=True)
         item = {
             "subdomain": res.subdomain,

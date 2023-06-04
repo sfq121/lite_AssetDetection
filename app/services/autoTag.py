@@ -4,7 +4,7 @@ from app import utils
 from app.modules import SiteAutoTag
 logger = utils.get_logger()
 
-
+#根据返回的标题和code码进行打标
 class AutoTag:
     def __init__(self, site_info):
         self.site_info = site_info

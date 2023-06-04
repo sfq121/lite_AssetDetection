@@ -18,6 +18,7 @@ SET_PROXY = False
 
 
 def http_req(url, method='get', **kwargs):
+    #kwargs.setdefault 向字典传默认值
     kwargs.setdefault('verify', False)
     kwargs.setdefault('timeout', (10.1, 30.1))
     kwargs.setdefault('allow_redirects', False)

@@ -10,7 +10,7 @@ from .fetchSite import fetch_site
 
 logger = utils.get_logger()
 
-
+        #资产变化比较器
 class AssetSiteCompare(BaseThread):
     def __init__(self, scope_id):
         self._scope_id = scope_id
@@ -22,10 +22,11 @@ class AssetSiteCompare(BaseThread):
         self.site_change_map = {}
 
     def work(self, site):
+        #判断是不是黑站点
         if is_black_asset_site(site):
             logger.debug("{} in black asset site".format(site))
             return
-
+        #调用get请求，获得标题头和状态信息      jjibibibibib
         conn = utils.http_req(site)
         item = {
             "title": utils.get_title(conn.content),
@@ -34,6 +35,7 @@ class AssetSiteCompare(BaseThread):
         with self.mutex:
             self.new_site_info_map[site] = item
 
+        #如果状态码和标题发生改变那么更新站点信息
     def compare(self):
         site_info_list = asset_site.find_site_info_by_scope_id(scope_id=self._scope_id)
         for site_info in site_info_list:
@@ -65,7 +67,7 @@ class AssetSiteCompare(BaseThread):
 
         return self.site_change_map
 
-
+#资产站点监视器
 class AssetSiteMonitor(object):
     def __init__(self, scope_id):
         self.scope_id = scope_id
